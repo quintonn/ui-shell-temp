@@ -4,6 +4,19 @@ import { GearIcon, HomeIcon, InfoIcon, ProfileIcon } from "./icons";
 import { useAppGlobals } from "../../state/AppGlobalsContext";
 import type { AppIcon, NavbarItem, NavbarSubItem } from "../../types/app";
 
+const NAVBAR_HEADER_SURFACE_CLASS = "bg-white border-slate-200";
+const NAVBAR_MENU_SURFACE_CLASS = "bg-white border-slate-200";
+const NAVBAR_MENU_CONTAINER_CLASS = "relative";
+const NAVBAR_LEFT_ITEMS_CLASS = "hidden items-center gap-1 md:flex";
+const NAVBAR_RIGHT_ITEMS_CLASS = "ml-auto flex items-center gap-2";
+const NAVBAR_MENU_ITEM_CLASS = "flex w-full items-center gap-2 px-3 py-2 text-left text-sm text-slate-600 hover:bg-slate-50 hover:text-slate-900";
+const NAVBAR_ITEM_BASE_CLASS = "flex h-9 items-center rounded-lg text-xs font-medium text-slate-600 transition hover:bg-slate-100 hover:text-slate-900";
+const NAVBAR_MENU_TRIGGER_CLASS = "flex h-9 items-center rounded-lg text-slate-600 transition hover:bg-slate-100 hover:text-slate-900";
+const NAVBAR_ITEM_ICON_CLASS = "h-5 w-5";
+const NAVBAR_MENU_ITEM_ICON_CLASS = "h-4 w-4";
+const NAVBAR_MENU_TRIGGER_LABEL_CLASS = "text-xs font-medium";
+const NAVBAR_MENU_PANEL_CLASS = "absolute right-0 top-11 z-20 min-w-40 overflow-hidden rounded-xl border py-1 shadow-lg shadow-slate-900/10";
+
 function resolveNavIcon(icon?: AppIcon) {
     switch (icon) {
         case "home":
@@ -21,6 +34,18 @@ function resolveNavIcon(icon?: AppIcon) {
 
 function itemPaddingClass(hasLabel: boolean) {
     return hasLabel ? "px-2" : "w-9";
+}
+
+function navItemLayoutClass(hasLabel: boolean) {
+    return hasLabel ? "gap-2" : "justify-center";
+}
+
+function navItemClassName(hasLabel: boolean) {
+    return `${NAVBAR_ITEM_BASE_CLASS} ${navItemLayoutClass(hasLabel)} ${itemPaddingClass(hasLabel)}`;
+}
+
+function navMenuTriggerClassName(hasLabel: boolean) {
+    return `${NAVBAR_MENU_TRIGGER_CLASS} ${navItemLayoutClass(hasLabel)} ${itemPaddingClass(hasLabel)}`;
 }
 
 export function NavBar() {
@@ -63,10 +88,9 @@ export function NavBar() {
 
     function renderMenuItem(item: NavbarSubItem) {
         const icon = resolveNavIcon(item.icon);
-        const className = "flex w-full items-center gap-2 px-3 py-2 text-left text-sm text-slate-600 hover:bg-slate-50 hover:text-slate-900";
         const content = (
             <>
-                {icon ? <span className="h-4 w-4">{icon}</span> : null}
+                {icon ? <span className={NAVBAR_MENU_ITEM_ICON_CLASS}>{icon}</span> : null}
                 {item.label ? <span>{item.label}</span> : null}
             </>
         );
@@ -77,7 +101,7 @@ export function NavBar() {
                     key={item.id}
                     to={item.to}
                     onClick={() => setOpenMenuItemId(null)}
-                    className={className}
+                    className={NAVBAR_MENU_ITEM_CLASS}
                 >
                     {content}
                 </NavLink>
@@ -89,7 +113,7 @@ export function NavBar() {
                 key={item.id}
                 type="button"
                 onClick={() => item.actionId ? void handleActionClick(item.actionId) : undefined}
-                className={className}
+                className={NAVBAR_MENU_ITEM_CLASS}
             >
                 {content}
             </button>
@@ -99,10 +123,10 @@ export function NavBar() {
     function renderNavItem(item: NavbarItem) {
         const icon = resolveNavIcon(item.icon);
         const hasLabel = Boolean(item.label);
-        const className = `flex h-9 items-center ${hasLabel ? "gap-2" : "justify-center"} rounded-lg ${itemPaddingClass(hasLabel)} text-xs font-medium text-slate-600 transition hover:bg-slate-100 hover:text-slate-900`;
+        const className = navItemClassName(hasLabel);
         const content = (
             <>
-                {icon ? <span className="h-5 w-5">{icon}</span> : null}
+                {icon ? <span className={NAVBAR_ITEM_ICON_CLASS}>{icon}</span> : null}
                 {item.label ? <span>{item.label}</span> : null}
             </>
         );
@@ -111,20 +135,20 @@ export function NavBar() {
             const isOpen = openMenuItemId === item.id;
 
             return (
-                <div key={item.id} className="relative">
+                <div key={item.id} className={NAVBAR_MENU_CONTAINER_CLASS}>
                     <button
                         type="button"
                         onClick={() => setOpenMenuItemId((prev) => (prev === item.id ? null : item.id))}
-                        className={`flex h-9 items-center ${hasLabel ? "gap-2" : "justify-center"} rounded-lg ${itemPaddingClass(hasLabel)} text-slate-600 transition hover:bg-slate-100 hover:text-slate-900`}
+                        className={navMenuTriggerClassName(hasLabel)}
                         aria-label={item.label ?? item.id.toString()}
                         aria-expanded={isOpen}
                     >
-                        {icon ? <span className="h-5 w-5">{icon}</span> : null}
-                        {item.label ? <span className="text-xs font-medium">{item.label}</span> : null}
+                        {icon ? <span className={NAVBAR_ITEM_ICON_CLASS}>{icon}</span> : null}
+                        {item.label ? <span className={NAVBAR_MENU_TRIGGER_LABEL_CLASS}>{item.label}</span> : null}
                     </button>
 
                     {isOpen ? (
-                        <div className="absolute right-0 top-11 z-20 min-w-40 overflow-hidden rounded-xl border border-slate-200 bg-white py-1 shadow-lg shadow-slate-900/10">
+                        <div className={`${NAVBAR_MENU_PANEL_CLASS} ${NAVBAR_MENU_SURFACE_CLASS}`}>
                             {item.items.map((menuItem) => renderMenuItem(menuItem))}
                         </div>
                     ) : null}
@@ -154,12 +178,12 @@ export function NavBar() {
     }
 
     return (
-        <header ref={headerRef} className="flex h-14 items-center gap-3 border-b border-slate-200 bg-white px-4">
-            <div className="hidden items-center gap-1 md:flex">
+        <header ref={headerRef} className={`flex h-14 items-center gap-3 border-b px-4 ${NAVBAR_HEADER_SURFACE_CLASS}`}>
+            <div className={NAVBAR_LEFT_ITEMS_CLASS}>
                 {leftItems.map((item) => renderNavItem(item))}
             </div>
 
-            <div className="ml-auto flex items-center gap-2">
+            <div className={NAVBAR_RIGHT_ITEMS_CLASS}>
                 {rightItems.map((item) => renderNavItem(item))}
             </div>
         </header>

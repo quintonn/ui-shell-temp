@@ -10,7 +10,7 @@ type AppGlobalsContextValue = AppGlobals & {
     onActionClick?: (actionId: string) => void | Promise<void>;
 };
 
-const DEFAULT_APP_GLOBALS: AppGlobalsContextValue = {
+export const DEFAULT_APP_GLOBALS: AppGlobalsContextValue = {
     appName: "App",
     authType: "none",
     sidebarItems: [

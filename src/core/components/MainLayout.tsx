@@ -47,7 +47,7 @@ export function MainLayout() {
         <Panel
             panelRef={leftSidebarPanelRef}
             disabled={!layout.allowSidebarResize}
-            defaultSize="20%"
+            defaultSize="10%"
             minSize="200px"
             collapsible
             collapsedSize="72px"

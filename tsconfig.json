@@ -25,10 +25,13 @@
         "./src/*"
       ]
     },
-    "types": []
+    "types": [
+      "node"
+    ]
   },
   "include": [
     "src",
+    "dev-app",
     "tests",
     "src/types"
   ],
