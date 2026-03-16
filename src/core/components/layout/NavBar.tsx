@@ -4,18 +4,11 @@ import { GearIcon, HomeIcon, InfoIcon, ProfileIcon } from "./icons";
 import { useAppGlobals } from "../../state/AppGlobalsContext";
 import type { AppIcon, NavbarItem, NavbarSubItem } from "../../types/app";
 
-const NAVBAR_HEADER_SURFACE_CLASS = "bg-white border-slate-200";
-const NAVBAR_MENU_SURFACE_CLASS = "bg-white border-slate-200";
-const NAVBAR_MENU_CONTAINER_CLASS = "relative";
-const NAVBAR_LEFT_ITEMS_CLASS = "hidden items-center gap-1 md:flex";
-const NAVBAR_RIGHT_ITEMS_CLASS = "ml-auto flex items-center gap-2";
-const NAVBAR_MENU_ITEM_CLASS = "flex w-full items-center gap-2 px-3 py-2 text-left text-sm text-slate-600 hover:bg-slate-50 hover:text-slate-900";
-const NAVBAR_ITEM_BASE_CLASS = "flex h-9 items-center rounded-lg text-xs font-medium text-slate-600 transition hover:bg-slate-100 hover:text-slate-900";
-const NAVBAR_MENU_TRIGGER_CLASS = "flex h-9 items-center rounded-lg text-slate-600 transition hover:bg-slate-100 hover:text-slate-900";
-const NAVBAR_ITEM_ICON_CLASS = "h-5 w-5";
-const NAVBAR_MENU_ITEM_ICON_CLASS = "h-4 w-4";
+const NAVBAR_HEADER_VISUAL_CLASS = "bg-white border-slate-200";
+const NAVBAR_ITEM_VISUAL_CLASS = "text-xs font-medium text-slate-600 transition hover:bg-slate-100 hover:text-slate-900";
+const NAVBAR_MENU_ITEM_VISUAL_CLASS = "text-sm text-slate-600 hover:bg-slate-50 hover:text-slate-900";
 const NAVBAR_MENU_TRIGGER_LABEL_CLASS = "text-xs font-medium";
-const NAVBAR_MENU_PANEL_CLASS = "absolute right-0 top-11 z-20 min-w-40 overflow-hidden rounded-xl border py-1 shadow-lg shadow-slate-900/10";
+const NAVBAR_MENU_PANEL_VISUAL_CLASS = "rounded-xl border border-slate-200 bg-white shadow-lg shadow-slate-900/10";
 
 function resolveNavIcon(icon?: AppIcon) {
     switch (icon) {
@@ -41,11 +34,11 @@ function navItemLayoutClass(hasLabel: boolean) {
 }
 
 function navItemClassName(hasLabel: boolean) {
-    return `${NAVBAR_ITEM_BASE_CLASS} ${navItemLayoutClass(hasLabel)} ${itemPaddingClass(hasLabel)}`;
+    return `flex h-9 items-center rounded-lg ${navItemLayoutClass(hasLabel)} ${itemPaddingClass(hasLabel)} ${NAVBAR_ITEM_VISUAL_CLASS}`;
 }
 
 function navMenuTriggerClassName(hasLabel: boolean) {
-    return `${NAVBAR_MENU_TRIGGER_CLASS} ${navItemLayoutClass(hasLabel)} ${itemPaddingClass(hasLabel)}`;
+    return `flex h-9 items-center rounded-lg ${navItemLayoutClass(hasLabel)} ${itemPaddingClass(hasLabel)} text-slate-600 transition hover:bg-slate-100 hover:text-slate-900`;
 }
 
 export function NavBar() {
@@ -90,7 +83,7 @@ export function NavBar() {
         const icon = resolveNavIcon(item.icon);
         const content = (
             <>
-                {icon ? <span className={NAVBAR_MENU_ITEM_ICON_CLASS}>{icon}</span> : null}
+                {icon ? <span className="size-4">{icon}</span> : null}
                 {item.label ? <span>{item.label}</span> : null}
             </>
         );
@@ -101,7 +94,7 @@ export function NavBar() {
                     key={item.id}
                     to={item.to}
                     onClick={() => setOpenMenuItemId(null)}
-                    className={NAVBAR_MENU_ITEM_CLASS}
+                    className={`flex w-full items-center gap-2 px-3 py-2 text-left ${NAVBAR_MENU_ITEM_VISUAL_CLASS}`}
                 >
                     {content}
                 </NavLink>
@@ -113,7 +106,7 @@ export function NavBar() {
                 key={item.id}
                 type="button"
                 onClick={() => item.actionId ? void handleActionClick(item.actionId) : undefined}
-                className={NAVBAR_MENU_ITEM_CLASS}
+                className={`flex w-full items-center gap-2 px-3 py-2 text-left ${NAVBAR_MENU_ITEM_VISUAL_CLASS}`}
             >
                 {content}
             </button>
@@ -126,7 +119,7 @@ export function NavBar() {
         const className = navItemClassName(hasLabel);
         const content = (
             <>
-                {icon ? <span className={NAVBAR_ITEM_ICON_CLASS}>{icon}</span> : null}
+                {icon ? <span className="size-5">{icon}</span> : null}
                 {item.label ? <span>{item.label}</span> : null}
             </>
         );
@@ -135,7 +128,7 @@ export function NavBar() {
             const isOpen = openMenuItemId === item.id;
 
             return (
-                <div key={item.id} className={NAVBAR_MENU_CONTAINER_CLASS}>
+                <div key={item.id} className="relative">
                     <button
                         type="button"
                         onClick={() => setOpenMenuItemId((prev) => (prev === item.id ? null : item.id))}
@@ -143,12 +136,12 @@ export function NavBar() {
                         aria-label={item.label ?? item.id.toString()}
                         aria-expanded={isOpen}
                     >
-                        {icon ? <span className={NAVBAR_ITEM_ICON_CLASS}>{icon}</span> : null}
+                        {icon ? <span className="size-5">{icon}</span> : null}
                         {item.label ? <span className={NAVBAR_MENU_TRIGGER_LABEL_CLASS}>{item.label}</span> : null}
                     </button>
 
                     {isOpen ? (
-                        <div className={`${NAVBAR_MENU_PANEL_CLASS} ${NAVBAR_MENU_SURFACE_CLASS}`}>
+                        <div className={`absolute right-0 top-11 z-20 min-w-40 overflow-hidden py-1 ${NAVBAR_MENU_PANEL_VISUAL_CLASS}`}>
                             {item.items.map((menuItem) => renderMenuItem(menuItem))}
                         </div>
                     ) : null}
@@ -178,12 +171,12 @@ export function NavBar() {
     }
 
     return (
-        <header ref={headerRef} className={`flex h-14 items-center gap-3 border-b px-4 ${NAVBAR_HEADER_SURFACE_CLASS}`}>
-            <div className={NAVBAR_LEFT_ITEMS_CLASS}>
+        <header ref={headerRef} className={`flex h-14 items-center gap-3 border-b px-4 ${NAVBAR_HEADER_VISUAL_CLASS}`}>
+            <div className="hidden items-center gap-1 md:flex">
                 {leftItems.map((item) => renderNavItem(item))}
             </div>
 
-            <div className={NAVBAR_RIGHT_ITEMS_CLASS}>
+            <div className="ml-auto flex items-center gap-2">
                 {rightItems.map((item) => renderNavItem(item))}
             </div>
         </header>
