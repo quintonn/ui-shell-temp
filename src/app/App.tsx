@@ -4,10 +4,11 @@ import { onClick } from "@/app/services/actionService";
 import { MainLayout } from "@/core/components/MainLayout";
 import { AppGlobalsProvider } from "@/core/state/AppGlobalsContext";
 import { AppGlobals } from "@/core/types/app";
+import { DefaultIconService } from "@/core/services/iconService";
 import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
 
 
-export function App({ globals }: { globals: AppGlobals }) {
+export function App({ globals, iconService }: { globals: AppGlobals; iconService?: DefaultIconService }) {
     const navigate = useNavigate();
 
     async function handleActionClick(actionId: string) {
@@ -19,7 +20,7 @@ export function App({ globals }: { globals: AppGlobals }) {
     }
 
     return (
-        <AppGlobalsProvider value={globals} onActionClick={handleActionClick}>
+        <AppGlobalsProvider value={globals} onActionClick={handleActionClick} iconService={iconService}>
             <main className="h-dvh w-full overflow-hidden">
                 <Routes>
                     <Route path="/" element={<MainLayout />}>

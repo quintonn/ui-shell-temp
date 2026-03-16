@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { NavLink } from "react-router-dom";
-import { GearIcon, HomeIcon, InfoIcon, ProfileIcon } from "./icons";
 import { useAppGlobals } from "../../state/AppGlobalsContext";
+import type { DefaultIconService } from "../../services/iconService";
 import type { AppIcon, NavbarItem, NavbarSubItem, NavbarTheme } from "../../types/app";
 
 const NAVBAR_DEFAULTS: Required<NavbarTheme> = {
@@ -12,16 +12,16 @@ const NAVBAR_DEFAULTS: Required<NavbarTheme> = {
     menuPanel: "rounded-xl border border-slate-200 bg-white shadow-lg shadow-slate-900/10",
 };
 
-function resolveNavIcon(icon?: AppIcon) {
+function resolveNavIcon(icon: AppIcon | undefined, iconService: DefaultIconService) {
     switch (icon) {
         case "home":
-            return <HomeIcon />;
+            return iconService.homeIcon("size-6");
         case "info":
-            return <InfoIcon />;
+            return iconService.infoIcon("size-6");
         case "profile":
-            return <ProfileIcon />;
+            return iconService.profileIcon("size-6");
         case "gear":
-            return <GearIcon />;
+            return iconService.gearIcon("size-6");
         default:
             return null;
     }
@@ -36,17 +36,17 @@ function navItemLayoutClass(hasLabel: boolean) {
 }
 
 function navItemClassName(hasLabel: boolean, item: string) {
-    return `flex h-9 items-center rounded-lg ${navItemLayoutClass(hasLabel)} ${itemPaddingClass(hasLabel)} ${item}`;
+    return `cursor-pointer flex h-9 items-center rounded-lg ${navItemLayoutClass(hasLabel)} ${itemPaddingClass(hasLabel)} ${item}`;
 }
 
 function navMenuTriggerClassName(hasLabel: boolean, item: string) {
-    return `flex h-9 items-center rounded-lg ${navItemLayoutClass(hasLabel)} ${itemPaddingClass(hasLabel)} ${item}`;
+    return `cursor-pointer flex h-9 items-center rounded-lg ${navItemLayoutClass(hasLabel)} ${itemPaddingClass(hasLabel)} ${item}`;
 }
 
 export function NavBar() {
     const [openMenuItemId, setOpenMenuItemId] = useState<string | null>(null);
     const headerRef = useRef<HTMLElement | null>(null);
-    const { navbarItems, onActionClick, theme } = useAppGlobals();
+    const { navbarItems, onActionClick, theme, iconService } = useAppGlobals();
     const leftItems = navbarItems.filter((item) => item.align !== "right");
     const rightItems = navbarItems.filter((item) => item.align === "right");
     const navbar = { ...NAVBAR_DEFAULTS, ...theme?.navbar };
@@ -83,7 +83,7 @@ export function NavBar() {
     }
 
     function renderMenuItem(item: NavbarSubItem) {
-        const icon = resolveNavIcon(item.icon);
+        const icon = resolveNavIcon(item.icon, iconService);
         const content = (
             <>
                 {icon ? <span className="size-4">{icon}</span> : null}
@@ -117,7 +117,7 @@ export function NavBar() {
     }
 
     function renderNavItem(item: NavbarItem) {
-        const icon = resolveNavIcon(item.icon);
+        const icon = resolveNavIcon(item.icon, iconService);
         const hasLabel = Boolean(item.label);
         const className = navItemClassName(hasLabel, navbar.item);
         const content = (

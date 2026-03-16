@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, type ReactNode } from "react";
 import type { AppGlobals } from "../types/app";
+import { DefaultIconService } from "../services/iconService";
 
 type AppGlobalsContextValue = AppGlobals & {
     /**
@@ -8,6 +9,7 @@ type AppGlobalsContextValue = AppGlobals & {
      * If not provided, `actionId` clicks are no-ops.
      */
     onActionClick?: (actionId: string) => void | Promise<void>;
+    iconService: DefaultIconService;
 };
 
 export const DEFAULT_APP_GLOBALS: AppGlobalsContextValue = {
@@ -24,6 +26,7 @@ export const DEFAULT_APP_GLOBALS: AppGlobalsContextValue = {
         allowSidebarResize: true,
         allowRightSidebarResize: true,
     },
+    iconService: new DefaultIconService(),
 };
 
 const AppGlobalsContext = createContext<AppGlobalsContextValue>(DEFAULT_APP_GLOBALS);
@@ -36,16 +39,17 @@ type AppGlobalsProviderProps = {
      * Can be omitted entirely if you only use `to`-based items.
      */
     onActionClick?: (actionId: string) => void | Promise<void>;
+    iconService?: DefaultIconService;
     children: ReactNode;
 };
 
-export function AppGlobalsProvider({ value, onActionClick, children }: AppGlobalsProviderProps) {
+export function AppGlobalsProvider({ value, onActionClick, iconService = new DefaultIconService(), children }: AppGlobalsProviderProps) {
     useEffect(() => {
         document.title = value.appName;
     }, [value.appName]);
 
     return (
-        <AppGlobalsContext.Provider value={{ ...value, onActionClick }}>
+        <AppGlobalsContext.Provider value={{ ...value, onActionClick, iconService }}>
             {children}
         </AppGlobalsContext.Provider>
     );
