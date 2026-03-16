@@ -1,10 +1,11 @@
+import { AboutPage } from "@/app/pages/AboutPage";
+import { HomePage } from "@/app/pages/HomePage";
+import { onClick } from "@/app/services/actionService";
+import { MainLayout } from "@/core/components/MainLayout";
+import { AppGlobalsProvider } from "@/core/state/AppGlobalsContext";
+import { AppGlobals } from "@/core/types/app";
 import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
-import { MainLayout } from "../core/components/MainLayout";
-import { AppGlobalsProvider } from "../core/state/AppGlobalsContext";
-import type { AppGlobals } from "../core/types/app";
-import { onClick } from "./services/actionService";
-import { AboutPage } from "./pages/AboutPage";
-import { HomePage } from "./pages/HomePage";
+
 
 export function App({ globals }: { globals: AppGlobals }) {
     const navigate = useNavigate();

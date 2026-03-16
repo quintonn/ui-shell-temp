@@ -13,12 +13,6 @@ type AppGlobalsContextValue = AppGlobals & {
 const DEFAULT_APP_GLOBALS: AppGlobalsContextValue = {
     appName: "App",
     authType: "none",
-    theme: {
-        brandColor: "#0f766e",
-        accentColor: "#0ea5e9",
-        surfaceColor: "#ffffff",
-        textColor: "#0f172a",
-    },
     sidebarItems: [
         { id: "home", label: "Home", to: "/", icon: "home" },
     ],
@@ -48,12 +42,7 @@ type AppGlobalsProviderProps = {
 export function AppGlobalsProvider({ value, onActionClick, children }: AppGlobalsProviderProps) {
     useEffect(() => {
         document.title = value.appName;
-
-        document.documentElement.style.setProperty("--app-brand-color", value.theme.brandColor);
-        document.documentElement.style.setProperty("--app-accent-color", value.theme.accentColor);
-        document.documentElement.style.setProperty("--app-surface-color", value.theme.surfaceColor);
-        document.documentElement.style.setProperty("--app-text-color", value.theme.textColor);
-    }, [value.appName, value.theme.accentColor, value.theme.brandColor, value.theme.surfaceColor, value.theme.textColor]);
+    }, [value.appName]);
 
     return (
         <AppGlobalsContext.Provider value={{ ...value, onActionClick }}>

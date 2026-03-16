@@ -1,11 +1,16 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
-import { App } from "./app/App";
-import { GlobalStartupSpinner } from "./core/components/GlobalStartupSpinner";
-import { runAppStartupService } from "./core/services/appStartupService";
-import type { AppGlobals } from "./core/types/app";
+
+
+
+
+import { GlobalStartupSpinner } from "@/core/components/GlobalStartupSpinner";
+
 import "./index.css";
+import { AppGlobals } from "@/core/types/app";
+import { runAppStartupService } from "@/core/services/appStartupService";
+import { App } from "@/app/App";
 
 const tailwindRuntimeStyleId = "tailwind-runtime-input";
 if (!document.getElementById(tailwindRuntimeStyleId)) {

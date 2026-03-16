@@ -12,12 +12,6 @@ export type NavbarAlign = "left" | "right";
 
 export type SidebarPlacement = "hidden" | "over-nav" | "under-nav";
 
-export type ThemeConfig = {
-    brandColor: string;
-    accentColor: string;
-    surfaceColor: string;
-    textColor: string;
-};
 
 export type LayoutConfig = {
     includeTopBar: boolean;
@@ -66,7 +60,6 @@ export type NavbarItem = NavbarMenuItem | NavbarLinkItem;
 export type AppGlobals = {
     appName: string;
     authType: AuthType;
-    theme: ThemeConfig;
     sidebarItems: SidebarItem[];
     navbarItems: NavbarItem[];
     layout: LayoutConfig;

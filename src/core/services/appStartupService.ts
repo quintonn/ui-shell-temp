@@ -5,12 +5,6 @@ const STARTUP_DELAY_MS = 1000;
 const FALLBACK_GLOBALS: AppGlobals = {
     appName: "Qbic v2",
     authType: "oidc",
-    theme: {
-        brandColor: "#0f766e",
-        accentColor: "#0ea5e9",
-        surfaceColor: "#ffffff",
-        textColor: "#0f172a",
-    },
     sidebarItems: [
         { id: "home", label: "Home", to: "/", icon: "home" },
         { id: "about", label: "About", to: "/about", icon: "info" },
@@ -69,10 +63,6 @@ export function runAppStartupService() {
                 return {
                     ...FALLBACK_GLOBALS,
                     ...serverConfig,
-                    theme: {
-                        ...FALLBACK_GLOBALS.theme,
-                        ...(serverConfig.theme ?? {}),
-                    },
                     layout: {
                         ...FALLBACK_GLOBALS.layout,
                         ...(serverConfig.layout ?? {}),
