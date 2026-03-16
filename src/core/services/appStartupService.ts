@@ -25,5 +25,13 @@ export abstract class CachedAppStartupService implements AppStartupService {
         return {};
     }
 
+    getBootstrapComponent(): (() => null) | null {
+        return null;
+    }
+
+    onReady(): void {
+        // Override to run code after the app has mounted
+    }
+
     protected abstract initialize(): Promise<AppGlobals>;
 }

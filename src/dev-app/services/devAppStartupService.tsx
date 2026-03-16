@@ -1,9 +1,10 @@
 import { CachedAppStartupService } from "@/core/services/appStartupService";
 import { DefaultIconService } from "@/core/services/iconService.js";
 import { type AppGlobals, type Dictionary, type NavbarItem, type SidebarItem } from "@/core/types/app";
-import { type ReactElement } from "react";
+import { useEffect, type ReactElement } from "react";
 import { AboutPage } from "../pages/AboutPage";
 import { HomePage } from "../pages/HomePage";
+import { useRightSidebar } from "@/core/state/RightSidebarContext";
 
 const STARTUP_DELAY_MS = 1000;
 
@@ -61,6 +62,30 @@ export class DevAppStartupService extends CachedAppStartupService {
             "settings": <div>Settings page TODO</div>,
             "logout": <div>Logout action TODO</div>,
         };
+    }
+
+    getBootstrapComponent() {
+        return function DevAppBootstrap() {
+            const { setRightSidebarContent, clearRightSidebarContent } = useRightSidebar();
+
+            // just a test/example
+            useEffect(() => {
+                setTimeout(() => {
+                    setRightSidebarContent(<AboutPage />);
+                }, 1000)
+
+                setTimeout(() => {
+                    clearRightSidebarContent();
+                }, 3000)
+
+            }, []);
+
+            return null;
+        };
+    }
+
+    onReady(): void {
+        // Example: console.log("App is ready!");
     }
 
 }

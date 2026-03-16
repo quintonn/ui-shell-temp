@@ -28,6 +28,7 @@ function StartupGate() {
         () => appStartupService?.getIconService() ?? new DefaultIconService()
     );
     const routeElements = appStartupService?.getRouteElements() ?? {};
+    const bootstrapComponent = appStartupService?.getBootstrapComponent();
 
     React.useEffect(() => {
         let isActive = true;
@@ -52,7 +53,13 @@ function StartupGate() {
 
     return (
         <BrowserRouter>
-            <App globals={globals} iconService={iconService} routeElements={routeElements} />
+            <App
+                globals={globals}
+                iconService={iconService}
+                routeElements={routeElements}
+                bootstrapComponent={bootstrapComponent}
+                onReady={() => appStartupService?.onReady()}
+            />
         </BrowserRouter>
     );
 }

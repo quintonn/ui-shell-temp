@@ -4,12 +4,20 @@ import { RightSidebarProvider } from "@/core/state/RightSidebarContext";
 import { type AppGlobals, type Dictionary } from "@/core/types/app";
 import { DefaultIconService } from "@/core/services/iconService";
 import { Route, Routes } from "react-router-dom";
-import { type ReactElement } from "react";
+import { type ReactElement, useEffect } from "react";
 
+type AppContentProps = {
+    routeElements: Dictionary<ReactElement>;
+    onReady?: () => void;
+};
 
-
-function AppContent({ routeElements }: { routeElements: Dictionary<ReactElement> }) {
+function AppContent({ routeElements, onReady }: AppContentProps) {
     const { sidebarItems, navbarItems } = useAppGlobals();
+
+    useEffect(() => {
+        onReady?.();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     // Calculate allRouteItems from globals
     const allRouteItems: string[] = (() => {
@@ -48,11 +56,20 @@ function AppContent({ routeElements }: { routeElements: Dictionary<ReactElement>
     );
 }
 
-export function App({ globals, iconService, routeElements }: { globals: AppGlobals; iconService?: DefaultIconService; routeElements: Dictionary<ReactElement> }) {
+type AppProps = {
+    globals: AppGlobals;
+    iconService?: DefaultIconService;
+    routeElements: Dictionary<ReactElement>;
+    bootstrapComponent?: (() => null) | null;
+    onReady?: () => void;
+};
+
+export function App({ globals, iconService, routeElements, bootstrapComponent: BootstrapComponent, onReady }: AppProps) {
     return (
         <AppGlobalsProvider value={globals} iconService={iconService}>
             <RightSidebarProvider>
-                <AppContent routeElements={routeElements} />
+                {BootstrapComponent ? <BootstrapComponent /> : null}
+                <AppContent routeElements={routeElements} onReady={onReady} />
             </RightSidebarProvider>
         </AppGlobalsProvider>
     );
