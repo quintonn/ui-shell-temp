@@ -5,6 +5,7 @@ import { Breadcrumbs } from "./layout/Breadcrumbs";
 import { NavBar } from "./layout/NavBar";
 import { ResizeHandle, RightSidebar, Sidebar } from "./layout/SidePanels";
 import { useAppGlobals } from "../state/AppGlobalsContext";
+import { useRightSidebar } from "../state/RightSidebarContext";
 
 function ContentArea() {
     return (
@@ -21,6 +22,7 @@ function ContentArea() {
 
 export function MainLayout() {
     const { appName, layout, sidebarItems } = useAppGlobals();
+    const { rightSidebar, setRightSidebarCollapsed } = useRightSidebar();
 
     const includeTopBar = layout.includeTopBar;
 
@@ -31,6 +33,7 @@ export function MainLayout() {
 
     const [isLeftSidebarCollapsed, setIsLeftSidebarCollapsed] = useState(false);
     const leftSidebarPanelRef = useRef<PanelImperativeHandle | null>(null);
+    const rightSidebarPanelRef = useRef<PanelImperativeHandle | null>(null);
 
     function toggleLeftSidebar() {
         if (!leftSidebarPanelRef.current) return;
@@ -67,13 +70,30 @@ export function MainLayout() {
 
     const rightSidebarDisabled = !layout.allowRightSidebarResize;
 
-    const contentSection = showRightSidebar ? (
+    useEffect(() => {
+        if (!showRightSidebar || !rightSidebarPanelRef.current || !rightSidebar.content) {
+            return;
+        }
+
+        if (rightSidebar.collapsed) {
+            rightSidebarPanelRef.current.collapse();
+        } else {
+            rightSidebarPanelRef.current.expand();
+        }
+    }, [rightSidebar.collapsed, rightSidebar.content, showRightSidebar]);
+
+    const contentSection = showRightSidebar && rightSidebar.content ? (
         <Group orientation="horizontal" className="h-full w-full">
             <Panel className="min-w-0">
                 <ContentArea />
             </Panel>
             <ResizeHandle disabled={rightSidebarDisabled} />
-            <RightSidebar disabled={rightSidebarDisabled} />
+            <RightSidebar
+                panelRef={rightSidebarPanelRef}
+                disabled={rightSidebarDisabled}
+                content={rightSidebar.content}
+                onResize={(size) => setRightSidebarCollapsed(size.inPixels <= 1)}
+            />
         </Group>
     ) : (
         <ContentArea />
@@ -92,7 +112,12 @@ export function MainLayout() {
                     </div>
                 </Panel>
                 <ResizeHandle disabled={rightSidebarDisabled} />
-                <RightSidebar disabled={rightSidebarDisabled} />
+                <RightSidebar
+                    panelRef={rightSidebarPanelRef}
+                    disabled={rightSidebarDisabled}
+                    content={rightSidebar.content}
+                    onResize={(size) => setRightSidebarCollapsed(size.inPixels <= 1)}
+                />
             </Group>
         ) : (
             <div className="flex h-full min-h-0 flex-col bg-white">
@@ -129,7 +154,12 @@ export function MainLayout() {
                     </div>
                 </Panel>
                 <ResizeHandle disabled={rightSidebarDisabled} />
-                <RightSidebar disabled={rightSidebarDisabled} />
+                <RightSidebar
+                    panelRef={rightSidebarPanelRef}
+                    disabled={rightSidebarDisabled}
+                    content={rightSidebar.content}
+                    onResize={(size) => setRightSidebarCollapsed(size.inPixels <= 1)}
+                />
             </Group>
         );
     }

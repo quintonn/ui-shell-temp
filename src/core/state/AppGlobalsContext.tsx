@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, type ReactNode } from "react";
+import { createContext, useContext, useEffect, useMemo, type ReactNode } from "react";
 import type { AppGlobals } from "../types/app";
 import { DefaultIconService } from "../services/iconService";
 
@@ -36,8 +36,13 @@ export function AppGlobalsProvider({ value, iconService = new DefaultIconService
         document.title = value.appName;
     }, [value.appName]);
 
+    const contextValue = useMemo<AppGlobalsContextValue>(() => ({
+        ...value,
+        iconService,
+    }), [iconService, value]);
+
     return (
-        <AppGlobalsContext.Provider value={{ ...value, iconService }}>
+        <AppGlobalsContext.Provider value={contextValue}>
             {children}
         </AppGlobalsContext.Provider>
     );

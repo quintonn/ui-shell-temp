@@ -148,7 +148,7 @@ export function NavBar() {
 
 
         return (
-            <NavLink key={item.id} to={item.to} className={className} aria-label={item.label ?? item.id.toString()}>
+            <NavLink key={item.id} to={item.to ?? item.label ?? item.id} className={className} aria-label={item.label ?? item.id.toString()}>
                 {content}
             </NavLink>
         );

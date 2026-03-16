@@ -1,5 +1,6 @@
+import type { ReactNode } from "react";
 import { NavLink } from "react-router-dom";
-import { Panel, Separator } from "react-resizable-panels";
+import { Panel, Separator, type PanelImperativeHandle } from "react-resizable-panels";
 import { SidebarLink } from "./SidebarLink";
 import { useAppGlobals } from "../../state/AppGlobalsContext";
 import type { AppIcon, SidebarItem } from "../../types/app";
@@ -80,17 +81,26 @@ export function Sidebar({ collapsed, items, appName }: { collapsed: boolean; ite
     );
 }
 
-export function RightSidebar({ disabled }: { disabled?: boolean }) {
+type RightSidebarProps = {
+    disabled?: boolean;
+    panelRef?: React.RefObject<PanelImperativeHandle | null>;
+    content?: ReactNode;
+    onResize?: (size: { inPixels: number }) => void;
+};
+
+export function RightSidebar({ disabled, panelRef, content, onResize }: RightSidebarProps) {
     return (
         <Panel
+            panelRef={panelRef}
             disabled={disabled}
             defaultSize="22%"
             minSize="15%"
             collapsible
             collapsedSize="0%"
+            onResize={onResize}
             className="min-w-0 border-l border-slate-200 bg-white p-4"
         >
-            right sidebar
+            {content}
         </Panel>
     );
 }

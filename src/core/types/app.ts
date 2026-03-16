@@ -1,9 +1,3 @@
-type RequireAtLeastOne<T, Keys extends keyof T = keyof T> =
-    Pick<T, Exclude<keyof T, Keys>>
-    & {
-        [Key in Keys]-?: Required<Pick<T, Key>> & Partial<Pick<T, Exclude<Keys, Key>>>;
-    }[Keys];
-
 export type AuthType = "none" | "basic" | "oidc" | "saml";
 
 export type AppIcon = "home" | "info" | "gear" | "profile";
@@ -12,6 +6,9 @@ export type NavbarAlign = "left" | "right";
 
 export type SidebarPlacement = "hidden" | "over-nav" | "under-nav";
 
+export interface Dictionary<T> {
+    [Key: string]: T;
+}
 
 export type LayoutConfig = {
     includeTopBar: boolean;
@@ -44,7 +41,7 @@ type NavbarBaseItem = {
 
 export type NavbarMenuItem = NavbarBaseItem & {
     items: NavbarSubItem[];
-    to: never;
+    to?: never;
 };
 
 export type NavbarLinkItem = NavbarBaseItem & {
