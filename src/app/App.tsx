@@ -1,76 +1,45 @@
-import { AboutPage } from "@/app/pages/AboutPage";
-import { HomePage } from "@/app/pages/HomePage";
 import { MainLayout } from "@/core/components/MainLayout";
-import { AppGlobalsProvider } from "@/core/state/AppGlobalsContext";
-import { RightSidebarProvider, useRightSidebar } from "@/core/state/RightSidebarContext";
-import { AppGlobals, Dictionary, NavbarItem, NavbarMenuItem, NavbarSubItem, SidebarItem } from "@/core/types/app";
+import { AppGlobalsProvider, useAppGlobals } from "@/core/state/AppGlobalsContext";
+import { RightSidebarProvider } from "@/core/state/RightSidebarContext";
+import { type AppGlobals, type Dictionary } from "@/core/types/app";
 import { DefaultIconService } from "@/core/services/iconService";
 import { Route, Routes } from "react-router-dom";
-import React, { useEffect } from "react";
+import { type ReactElement } from "react";
 
 
 
-const menuMapper: Dictionary<React.ReactElement> = {
-    "about": <AboutPage />,
-    "settings": (<div>Settings page TODO</div>),
-    "logout": (<div>Logout action TODO</div>),
-};
+function AppContent({ routeElements }: { routeElements: Dictionary<ReactElement> }) {
+    const { sidebarItems, navbarItems } = useAppGlobals();
 
-const sidebarItems: SidebarItem[] = [
-    { id: "home", label: "Home", to: "/", icon: "home" },
-    { id: "about", label: "About", to: "/about", icon: "info" },
-];
+    // Calculate allRouteItems from globals
+    const allRouteItems: string[] = (() => {
+        const items: string[] = [];
 
-const navbarItems: NavbarItem[] = [
-    { id: "config", label: "Config", to: "/about", align: "left" },
-    { id: "settings", label: "Settings", icon: "gear", to: "/settings", align: "right" },
-    {
-        id: "profile",
-        label: "Profile",
-        icon: "profile",
-        align: "right",
-        items: [
-            { id: "profile-view", label: "Profile", to: "/" },
-            { id: "profile-config", label: "Config", to: "/about" },
-            { id: "profile-logout", label: "Logout", to: "/logout" },
-        ]
-    },
-];
-
-const allRouteItems: string[] = [];
-
-for (const item in sidebarItems) {
-    if (sidebarItems[item]?.to) {
-        allRouteItems.push(sidebarItems[item]?.to);
-    }
-}
-for (const item in navbarItems) {
-    if (navbarItems[item]?.to) {
-        allRouteItems.push(navbarItems[item].to);
-    } else if (navbarItems[item]?.items) {
-        for (const subItem of navbarItems[item].items) {
-            allRouteItems.push(subItem.to);
+        for (const item in sidebarItems) {
+            if (sidebarItems[item]?.to) {
+                items.push(sidebarItems[item]?.to);
+            }
         }
-    }
-}
+        for (const item in navbarItems) {
+            if (navbarItems[item]?.to) {
+                items.push(navbarItems[item].to);
+            } else if (navbarItems[item]?.items) {
+                for (const subItem of navbarItems[item].items) {
+                    items.push(subItem.to);
+                }
+            }
+        }
 
-function AppContent() {
-    const { setRightSidebarContent } = useRightSidebar();
-
-    useEffect(() => {
-        setTimeout(() => {
-            setRightSidebarContent(<AboutPage />);
-        }, 1000);
-    }, []);
+        return items;
+    })();
 
     return (
         <main className="h-dvh w-full overflow-hidden">
             <Routes>
                 <Route path="/" element={<MainLayout />}>
-                    <Route index element={<HomePage />} />
+                    <Route index element={routeElements["index"]} />
                     {allRouteItems.map((path) => {
-                        const Component = menuMapper[path.replace("/", "")] || <div>{`Page for ${path} TODO`}</div>;
-                        return <Route key={path} path={path} element={Component} />;
+                        return <Route key={path} path={path} element={routeElements[path.replace("/", "")]} />;
                     })}
                     <Route path="*" element={<div>Unknown path</div>} />
                 </Route>
@@ -79,11 +48,11 @@ function AppContent() {
     );
 }
 
-export function App({ globals, iconService }: { globals: AppGlobals; iconService?: DefaultIconService }) {
+export function App({ globals, iconService, routeElements }: { globals: AppGlobals; iconService?: DefaultIconService; routeElements: Dictionary<ReactElement> }) {
     return (
-        <AppGlobalsProvider value={{ ...globals, sidebarItems, navbarItems }} iconService={iconService}>
+        <AppGlobalsProvider value={globals} iconService={iconService}>
             <RightSidebarProvider>
-                <AppContent />
+                <AppContent routeElements={routeElements} />
             </RightSidebarProvider>
         </AppGlobalsProvider>
     );

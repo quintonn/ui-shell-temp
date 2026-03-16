@@ -1,5 +1,6 @@
-import type { AppGlobals } from "../types/app";
+import type { AppGlobals, Dictionary } from "../types/app";
 import { DefaultIconService } from "./iconService";
+import type { ReactElement } from "react";
 
 export interface AppStartupService {
     run(): Promise<AppGlobals>;
@@ -18,6 +19,10 @@ export abstract class CachedAppStartupService implements AppStartupService {
 
     getIconService(): DefaultIconService {
         return new DefaultIconService();
+    }
+
+    getRouteElements(): Dictionary<ReactElement> {
+        return {};
     }
 
     protected abstract initialize(): Promise<AppGlobals>;

@@ -10,4 +10,3 @@ export function getAppStartupService(): CachedAppStartupService | null {
 
     return null; // Replace with actual production AppStartupService implementation when available
 }
-

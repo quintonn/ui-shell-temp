@@ -6,10 +6,13 @@ import { AppGlobals } from "@/core/types/app";
 import { CachedAppStartupService } from "@/core/services/appStartupService";
 import { DefaultIconService } from "@/core/services/iconService";
 import { App } from "@/app/App";
-
-import "./index.css";
 import { DEFAULT_APP_GLOBALS } from "@/core/state/AppGlobalsContext";
-import { getAppStartupService } from "@/app-config";
+
+// project-specific imports
+import { getAppStartupService } from "@/dev-app/AppConfig";
+
+// style imports
+import "./index.css";
 
 const rootElement = document.getElementById("root");
 
@@ -24,6 +27,7 @@ function StartupGate() {
     const [iconService] = React.useState<DefaultIconService>(
         () => appStartupService?.getIconService() ?? new DefaultIconService()
     );
+    const routeElements = appStartupService?.getRouteElements() ?? {};
 
     React.useEffect(() => {
         let isActive = true;
@@ -48,7 +52,7 @@ function StartupGate() {
 
     return (
         <BrowserRouter>
-            <App globals={globals} iconService={iconService} />
+            <App globals={globals} iconService={iconService} routeElements={routeElements} />
         </BrowserRouter>
     );
 }
