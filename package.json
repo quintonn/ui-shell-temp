@@ -2,10 +2,13 @@
   "name": "ui-app",
   "version": "1.0.0",
   "description": "ui-app",
+  "bin": {
+    "qbic": "./cli/qbic.cjs"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "parcel src/dev-app/index.html",
-    "build": "parcel build src/dev-app/index.html"
+    "dev": "node ./cli/qbic.cjs dev --entry ./dev-app/AppConfig.tsx",
+    "build": "node ./cli/qbic.cjs build --entry ./dev-app/AppConfig.tsx"
   },
   "keywords": [],
   "author": "",
