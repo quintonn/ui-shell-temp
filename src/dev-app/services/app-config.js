@@ -22,7 +22,7 @@ export const appConfig = {
     ],
     layout: {
         includeTopBar: true,
-        leftSidebarPlacement: "under-nav",
+        leftSidebarPlacement: "over-nav",
         rightSidebarPlacement: "under-nav",
         allowSidebarResize: true,
         allowRightSidebarResize: true,

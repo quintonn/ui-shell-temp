@@ -15,10 +15,11 @@ export class DevAppStartupService extends CachedAppStartupService {
         await sleep(STARTUP_DELAY_MS);
 
         const { appConfig } = await import("./app-config.js");
-        const fallbackGlobals = appConfig as AppGlobals;
+        const globalAppConfig = appConfig as AppGlobals;
 
-        console.log(fallbackGlobals);
+        // Can customize global values in code too, or fetch via different API calls
+        globalAppConfig.theme = { ...globalAppConfig.theme, navbar: { ...globalAppConfig.theme?.navbar, header: "bg-slate-100 border-slate-200" } }
 
-        return fallbackGlobals;
+        return globalAppConfig;
     }
 }

@@ -57,10 +57,23 @@ export type NavbarLinkItem = NavbarBaseItem & NavigationTarget & {
 
 export type NavbarItem = NavbarMenuItem | NavbarLinkItem;
 
+export type NavbarTheme = {
+    header?: string;
+    item?: string;
+    menuItem?: string;
+    menuTriggerLabel?: string;
+    menuPanel?: string;
+};
+
+export type AppTheme = {
+    navbar?: NavbarTheme;
+};
+
 export type AppGlobals = {
     appName: string;
     authType: AuthType;
     sidebarItems: SidebarItem[];
     navbarItems: NavbarItem[];
     layout: LayoutConfig;
+    theme?: AppTheme;
 };
