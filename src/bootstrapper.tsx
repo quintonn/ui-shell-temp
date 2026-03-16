@@ -105,10 +105,13 @@ function StartupGate({ startupService }: StartupGateProps) {
 }
 
 export async function bootstrapApp(startupService: CachedAppStartupService | null) {
-    const rootElement = document.getElementById("root");
+    let rootElement = document.getElementById("root");
 
     if (!rootElement) {
-        throw new Error("Root element with id 'root' was not found.");
+        rootElement = document.createElement("div");
+        rootElement.id = "root";
+        console.log("Adding a root div for bootstrap to work");
+        document.body.appendChild(rootElement);
     }
 
     if (process.env.NODE_ENV !== "production") {
