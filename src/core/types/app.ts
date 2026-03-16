@@ -21,22 +21,19 @@ export type LayoutConfig = {
     allowRightSidebarResize: boolean;
 };
 
-export type NavigationTarget = RequireAtLeastOne<{
-    to: string;
-    actionId: string;
-}, "to" | "actionId">;
-
 export type SidebarItem = {
     id: string;
     label: string;
     icon?: AppIcon;
-} & NavigationTarget;
+    to: string;
+};
 
 export type NavbarSubItem = {
     id: string;
     label?: string;
     icon?: AppIcon;
-} & NavigationTarget;
+    to: string;
+};
 
 type NavbarBaseItem = {
     id: string;
@@ -47,12 +44,12 @@ type NavbarBaseItem = {
 
 export type NavbarMenuItem = NavbarBaseItem & {
     items: NavbarSubItem[];
-    to?: never;
-    actionId?: never;
+    to: never;
 };
 
-export type NavbarLinkItem = NavbarBaseItem & NavigationTarget & {
+export type NavbarLinkItem = NavbarBaseItem & {
     items?: never;
+    to: string;
 };
 
 export type NavbarItem = NavbarMenuItem | NavbarLinkItem;

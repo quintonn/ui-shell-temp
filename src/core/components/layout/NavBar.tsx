@@ -46,7 +46,7 @@ function navMenuTriggerClassName(hasLabel: boolean, item: string) {
 export function NavBar() {
     const [openMenuItemId, setOpenMenuItemId] = useState<string | null>(null);
     const headerRef = useRef<HTMLElement | null>(null);
-    const { navbarItems, onActionClick, theme, iconService } = useAppGlobals();
+    const { navbarItems, theme, iconService } = useAppGlobals();
     const leftItems = navbarItems.filter((item) => item.align !== "right");
     const rightItems = navbarItems.filter((item) => item.align === "right");
     const navbar = { ...NAVBAR_DEFAULTS, ...theme?.navbar };
@@ -77,11 +77,6 @@ export function NavBar() {
         };
     }, []);
 
-    async function handleActionClick(actionId: string) {
-        await onActionClick?.(actionId);
-        setOpenMenuItemId(null);
-    }
-
     function renderMenuItem(item: NavbarSubItem) {
         const icon = resolveNavIcon(item.icon, iconService);
         const content = (
@@ -108,7 +103,6 @@ export function NavBar() {
             <button
                 key={item.id}
                 type="button"
-                onClick={() => item.actionId ? void handleActionClick(item.actionId) : undefined}
                 className={`flex w-full items-center gap-2 px-3 py-2 text-left ${navbar.menuItem}`}
             >
                 {content}
@@ -152,24 +146,11 @@ export function NavBar() {
             );
         }
 
-        if (item.to) {
-            return (
-                <NavLink key={item.id} to={item.to} className={className} aria-label={item.label ?? item.id.toString()}>
-                    {content}
-                </NavLink>
-            );
-        }
 
         return (
-            <button
-                key={item.id}
-                type="button"
-                onClick={() => item.actionId ? void handleActionClick(item.actionId) : undefined}
-                className={className}
-                aria-label={item.label ?? item.id.toString()}
-            >
+            <NavLink key={item.id} to={item.to} className={className} aria-label={item.label ?? item.id.toString()}>
                 {content}
-            </button>
+            </NavLink>
         );
     }
 

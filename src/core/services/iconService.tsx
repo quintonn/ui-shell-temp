@@ -3,6 +3,7 @@ import type { ReactElement } from "react";
 /**
  * Provides icon elements for the application layout.
  * Extend this class and override individual methods to swap out specific icons.
+ * This class uses Heroicons by default, but you can return any React element from the methods (e.g. custom SVG, icon library component, etc.)
  *
  * @example
  * class MyIconService extends DefaultIconService {

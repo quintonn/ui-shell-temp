@@ -7,7 +7,7 @@ export const appConfig = {
     ],
     navbarItems: [
         { id: "config", label: "Config", to: "/about", align: "left" },
-        { id: "settings", label: "Settings", icon: "gear", actionId: "nav.settings", align: "right" },
+        { id: "settings", label: "Settings", icon: "gear", to: "/settings", align: "right" },
         {
             id: "profile",
             label: "Profile",
@@ -16,7 +16,7 @@ export const appConfig = {
             items: [
                 { id: "profile-view", label: "Profile", to: "/" },
                 { id: "profile-config", label: "Config", to: "/about" },
-                { id: "profile-logout", label: "Logout", actionId: "auth.logout" },
+                { id: "profile-logout", label: "Logout", to: "/logout" },
             ],
         },
     ],

@@ -5,13 +5,10 @@ type SidebarLinkProps = {
     label: string;
     icon: ReactNode;
     collapsed: boolean;
-    /** Direct route — renders as a NavLink with automatic active state. */
-    to?: string;
-    /** Called when the item is clicked (used for `actionId`-based items). */
-    onClick?: () => void;
+    to: string;
 };
 
-export function SidebarLink({ label, icon, collapsed, to, onClick }: SidebarLinkProps) {
+export function SidebarLink({ label, icon, collapsed, to }: SidebarLinkProps) {
     const buildClassName = (isActive: boolean) =>
         [
             "flex w-full items-center rounded-xl px-3 py-2 text-sm font-medium transition",
@@ -28,27 +25,15 @@ export function SidebarLink({ label, icon, collapsed, to, onClick }: SidebarLink
         </>
     );
 
-    if (to) {
-        return (
-            <NavLink
-                to={to}
-                end
-                className={({ isActive }) => buildClassName(isActive)}
-                title={collapsed ? label : undefined}
-            >
-                {content}
-            </NavLink>
-        );
-    }
 
     return (
-        <button
-            type="button"
-            onClick={onClick}
-            className={buildClassName(false)}
+        <NavLink
+            to={to}
+            end
+            className={({ isActive }) => buildClassName(isActive)}
             title={collapsed ? label : undefined}
         >
             {content}
-        </button>
+        </NavLink>
     );
 }

@@ -40,7 +40,7 @@ export function ResizeHandle({ disabled, toggleCollapsed, onToggle }: ResizeHand
 }
 
 export function Sidebar({ collapsed, items, appName }: { collapsed: boolean; items: SidebarItem[]; appName: string }) {
-    const { onActionClick, iconService } = useAppGlobals();
+    const { iconService } = useAppGlobals();
 
     function resolveSidebarIcon(icon: AppIcon | undefined) {
         switch (icon) {
@@ -73,7 +73,6 @@ export function Sidebar({ collapsed, items, appName }: { collapsed: boolean; ite
                         icon={resolveSidebarIcon(item.icon)}
                         collapsed={collapsed}
                         to={item.to}
-                        onClick={item.actionId ? () => void onActionClick?.(item.actionId!) : undefined}
                     />
                 ))}
             </div>
