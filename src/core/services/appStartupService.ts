@@ -6,6 +6,12 @@ export interface AppStartupService {
     run(): Promise<AppGlobals>;
 }
 
+export interface UIService {
+    getPageTitle(path: string): Promise<string>;
+    getRouteElements(): Dictionary<ReactElement>;
+    getBootstrapComponent(): (() => null) | null;
+}
+
 export abstract class CachedAppStartupService implements AppStartupService {
     private startupPromise: Promise<AppGlobals> | null = null;
 
@@ -21,17 +27,11 @@ export abstract class CachedAppStartupService implements AppStartupService {
         return new DefaultIconService();
     }
 
-    getRouteElements(): Dictionary<ReactElement> {
-        return {};
-    }
-
-    getBootstrapComponent(): (() => null) | null {
-        return null;
-    }
-
     onReady(): void {
         // Override to run code after the app has mounted
     }
 
     protected abstract initialize(): Promise<AppGlobals>;
+
+    abstract getUIService(): UIService;
 }

@@ -7,20 +7,28 @@ import { ResizeHandle, RightSidebar, Sidebar } from "./layout/SidePanels";
 import { useAppGlobals } from "../state/AppGlobalsContext";
 import { useRightSidebar } from "../state/RightSidebarContext";
 
-function ContentArea() {
+type ContentAreaProps = {
+    title: string;
+}
+function ContentArea({ title }: ContentAreaProps) {
     return (
         <main className="h-full min-h-0 flex-1 overflow-hidden bg-slate-50">
-            <div className="mx-auto flex h-full min-h-0 flex-col bg-white p-6 shadow-sm">
+            <div className="mx-auto flex h-full min-h-0 flex-col bg-white p-2 md:p-4 shadow-sm">
                 <Breadcrumbs />
                 <div className="min-h-0 flex-1 overflow-auto">
-                    <Outlet />
+                    <section className="flex h-full flex-col gap-3">
+                        <div className="text-3xl font-bold text-slate-950">{title}</div>
+                        <Outlet />
+                    </section>
                 </div>
             </div>
         </main>
     );
 }
-
-export function MainLayout() {
+export type MainLayoutProps = {
+    title: string;
+}
+export function MainLayout({ title }: MainLayoutProps) {
     const { appName, layout, sidebarItems } = useAppGlobals();
     const { rightSidebar, setRightSidebarCollapsed } = useRightSidebar();
 
@@ -85,7 +93,7 @@ export function MainLayout() {
     const contentSection = showRightSidebar && rightSidebar.content ? (
         <Group orientation="horizontal" className="h-full w-full">
             <Panel className="min-w-0">
-                <ContentArea />
+                <ContentArea title={title} />
             </Panel>
             <ResizeHandle disabled={rightSidebarDisabled} />
             <RightSidebar
@@ -96,7 +104,7 @@ export function MainLayout() {
             />
         </Group>
     ) : (
-        <ContentArea />
+        <ContentArea title={title} />
     );
 
     if (leftSidebarOverNavBar) {
@@ -108,7 +116,7 @@ export function MainLayout() {
                 <Panel className="min-w-0">
                     <div className="flex h-full min-h-0 flex-col bg-white">
                         {includeTopBar && <NavBar />}
-                        <ContentArea />
+                        <ContentArea title={title} />
                     </div>
                 </Panel>
                 <ResizeHandle disabled={rightSidebarDisabled} />
@@ -147,7 +155,7 @@ export function MainLayout() {
                             <Group orientation="horizontal" className="h-full w-full">
                                 {leftSidebarSection}
                                 <Panel className="min-w-0">
-                                    <ContentArea />
+                                    <ContentArea title={title} />
                                 </Panel>
                             </Group>
                         </div>

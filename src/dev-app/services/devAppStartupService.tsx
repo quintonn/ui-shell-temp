@@ -1,10 +1,8 @@
-import { CachedAppStartupService } from "@/core/services/appStartupService";
+import { CachedAppStartupService, UIService } from "@/core/services/appStartupService";
 import { DefaultIconService } from "@/core/services/iconService.js";
-import { type AppGlobals, type Dictionary, type NavbarItem, type SidebarItem } from "@/core/types/app";
-import { useEffect, type ReactElement } from "react";
-import { AboutPage } from "../pages/AboutPage";
-import { HomePage } from "../pages/HomePage";
-import { useRightSidebar } from "@/core/state/RightSidebarContext";
+import { type AppGlobals, type NavbarItem, type SidebarItem } from "@/core/types/app";
+import { DevUIService } from "@/dev-app/services/devUIService";
+import { DevIconService } from "@/dev-app/services/devIconService";
 
 const STARTUP_DELAY_MS = 1000;
 
@@ -20,7 +18,7 @@ const sidebarItems: SidebarItem[] = [
 ];
 
 const navbarItems: NavbarItem[] = [
-    { id: "config", label: "Config", to: "/about", align: "left" },
+    { id: "config", label: "Config", to: "/config", align: "left" },
     { id: "settings", label: "Settings", icon: "gear", to: "/settings", align: "right" },
     {
         id: "profile",
@@ -35,7 +33,12 @@ const navbarItems: NavbarItem[] = [
     },
 ];
 
+
+
 export class DevAppStartupService extends CachedAppStartupService {
+    getUIService(): UIService {
+        return new DevUIService();
+    }
     protected async initialize() {
         // Placeholder for startup work (token fetch, feature flags, config warmup, etc.)
         await sleep(STARTUP_DELAY_MS);
@@ -52,36 +55,7 @@ export class DevAppStartupService extends CachedAppStartupService {
     }
 
     getIconService(): DefaultIconService {
-        return new TestIconService();
-    }
-
-    getRouteElements(): Dictionary<ReactElement> {
-        return {
-            "index": <HomePage />,
-            "about": <AboutPage />,
-            "settings": <div>Settings page TODO</div>,
-            "logout": <div>Logout action TODO</div>,
-        };
-    }
-
-    getBootstrapComponent() {
-        return function DevAppBootstrap() {
-            const { setRightSidebarContent, clearRightSidebarContent } = useRightSidebar();
-
-            // just a test/example
-            useEffect(() => {
-                setTimeout(() => {
-                    setRightSidebarContent(<AboutPage />);
-                }, 1000)
-
-                setTimeout(() => {
-                    clearRightSidebarContent();
-                }, 3000)
-
-            }, []);
-
-            return null;
-        };
+        return new DevIconService();
     }
 
     onReady(): void {
@@ -90,14 +64,4 @@ export class DevAppStartupService extends CachedAppStartupService {
 
 }
 
-// This is an example of changing the default icons
-class TestIconService extends DefaultIconService {
-    homeIcon(className = ""): ReactElement {
-        const newClassName = `${className}`;
-        return (
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className={newClassName} >
-                <path strokeLinecap="round" strokeLinejoin="round" d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
-            </svg>
-        );
-    }
-}
+

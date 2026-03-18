@@ -3,7 +3,7 @@ import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 import { GlobalStartupSpinner } from "@/core/components/GlobalStartupSpinner";
 import { AppGlobals } from "@/core/types/app";
-import { CachedAppStartupService } from "@/core/services/appStartupService";
+import { CachedAppStartupService, UIService } from "@/core/services/appStartupService";
 import { DefaultIconService } from "@/core/services/iconService";
 import { App } from "@/app/App";
 import { DEFAULT_APP_GLOBALS } from "@/core/state/AppGlobalsContext";
@@ -59,7 +59,7 @@ function ensureTailwindRuntime() {
 }
 
 type StartupGateProps = {
-    startupService: CachedAppStartupService | null;
+    startupService: CachedAppStartupService;
 };
 
 function StartupGate({ startupService }: StartupGateProps) {
@@ -67,8 +67,12 @@ function StartupGate({ startupService }: StartupGateProps) {
     const [iconService] = React.useState<DefaultIconService>(
         () => startupService?.getIconService() ?? new DefaultIconService()
     );
-    const routeElements = startupService?.getRouteElements() ?? {};
-    const bootstrapComponent = startupService?.getBootstrapComponent();
+
+    const [uiService] = React.useState<UIService>(
+        () => startupService.getUIService()
+    );
+    const routeElements = uiService?.getRouteElements() ?? {};
+    const bootstrapComponent = uiService?.getBootstrapComponent();
 
     React.useEffect(() => {
         let isActive = true;
@@ -96,6 +100,7 @@ function StartupGate({ startupService }: StartupGateProps) {
             <App
                 globals={globals}
                 iconService={iconService}
+                uiService={uiService}
                 routeElements={routeElements}
                 bootstrapComponent={bootstrapComponent}
                 onReady={() => startupService?.onReady()}
@@ -104,7 +109,7 @@ function StartupGate({ startupService }: StartupGateProps) {
     );
 }
 
-export async function bootstrapApp(startupService: CachedAppStartupService | null) {
+export async function bootstrapApp(startupService: CachedAppStartupService) {
     let rootElement = document.getElementById("root");
 
     if (!rootElement) {

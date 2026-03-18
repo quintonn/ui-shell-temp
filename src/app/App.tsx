@@ -3,16 +3,33 @@ import { AppGlobalsProvider, useAppGlobals } from "@/core/state/AppGlobalsContex
 import { RightSidebarProvider } from "@/core/state/RightSidebarContext";
 import { type AppGlobals, type Dictionary } from "@/core/types/app";
 import { DefaultIconService } from "@/core/services/iconService";
-import { Route, Routes } from "react-router-dom";
-import { type ReactElement, useEffect } from "react";
+import { Route, Routes, useLocation } from "react-router-dom";
+import { type ReactElement, useEffect, useState } from "react";
+import { UIService } from "@/core/services/appStartupService";
 
 type AppContentProps = {
     routeElements: Dictionary<ReactElement>;
+    uiService: UIService;
     onReady?: () => void;
 };
 
-function AppContent({ routeElements, onReady }: AppContentProps) {
+function AppContent({ routeElements, uiService, onReady }: AppContentProps) {
     const { sidebarItems, navbarItems } = useAppGlobals();
+    const [title, setTitle] = useState<string>("home");
+    const location = useLocation();
+
+    const getTitle = async (): Promise<void> => {
+        console.log("location changed:");
+        console.log(location)
+        const title = await uiService.getPageTitle(location.pathname);
+        setTitle(title);
+    }
+
+    useEffect(() => {
+        console.log("location changed:");
+        console.log(location)
+        getTitle();
+    }, [location])
 
     useEffect(() => {
         onReady?.();
@@ -44,7 +61,7 @@ function AppContent({ routeElements, onReady }: AppContentProps) {
     return (
         <main className="h-dvh w-full overflow-hidden">
             <Routes>
-                <Route path="/" element={<MainLayout />}>
+                <Route path="/" element={<MainLayout key={title} title={title} />}>
                     <Route index element={routeElements["index"]} />
                     {allRouteItems.map((path) => {
                         return <Route key={path} path={path} element={routeElements[path.replace("/", "")]} />;
@@ -59,17 +76,18 @@ function AppContent({ routeElements, onReady }: AppContentProps) {
 type AppProps = {
     globals: AppGlobals;
     iconService?: DefaultIconService;
+    uiService: UIService;
     routeElements: Dictionary<ReactElement>;
     bootstrapComponent?: (() => null) | null;
     onReady?: () => void;
 };
 
-export function App({ globals, iconService, routeElements, bootstrapComponent: BootstrapComponent, onReady }: AppProps) {
+export function App({ globals, iconService, uiService, routeElements, bootstrapComponent: BootstrapComponent, onReady }: AppProps) {
     return (
         <AppGlobalsProvider value={globals} iconService={iconService}>
             <RightSidebarProvider>
                 {BootstrapComponent ? <BootstrapComponent /> : null}
-                <AppContent routeElements={routeElements} onReady={onReady} />
+                <AppContent uiService={uiService} routeElements={routeElements} onReady={onReady} />
             </RightSidebarProvider>
         </AppGlobalsProvider>
     );
