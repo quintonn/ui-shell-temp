@@ -61,7 +61,7 @@ function AppContent({ routeElements, uiService, onReady }: AppContentProps) {
     return (
         <main className="h-dvh w-full overflow-hidden">
             <Routes>
-                <Route path="/" element={<MainLayout key={title} title={title} />}>
+                <Route path="/" element={<MainLayout title={title} />}>
                     <Route index element={routeElements["index"]} />
                     {allRouteItems.map((path) => {
                         return <Route key={path} path={path} element={routeElements[path.replace("/", "")]} />;
