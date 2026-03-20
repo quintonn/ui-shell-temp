@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useMemo, type ReactNode } from "react";
-import type { AppGlobals } from "../types/app";
-import { DefaultIconService } from "../services/iconService";
+import type { AppGlobals } from "@/core/types/app";
+import { DefaultIconService } from "@/core/services/iconService";
 
 type AppGlobalsContextValue = AppGlobals & {
     iconService: DefaultIconService;

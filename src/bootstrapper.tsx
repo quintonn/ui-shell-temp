@@ -1,12 +1,12 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
-import { BrowserRouter } from "react-router-dom";
 import { GlobalStartupSpinner } from "@/core/components/GlobalStartupSpinner";
 import { AppGlobals } from "@/core/types/app";
 import { CachedAppStartupService, UIService } from "@/core/services/appStartupService";
 import { DefaultIconService } from "@/core/services/iconService";
 import { App } from "@/app/App";
 import { DEFAULT_APP_GLOBALS } from "@/core/state/AppGlobalsContext";
+import { BrowserRouter } from "react-router";
 
 // Re-exports for downstream consumers
 export { CachedAppStartupService } from "@/core/services/appStartupService";

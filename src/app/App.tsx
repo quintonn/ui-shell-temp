@@ -3,9 +3,11 @@ import { AppGlobalsProvider, useAppGlobals } from "@/core/state/AppGlobalsContex
 import { RightSidebarProvider } from "@/core/state/RightSidebarContext";
 import { type AppGlobals, type Dictionary } from "@/core/types/app";
 import { DefaultIconService } from "@/core/services/iconService";
-import { Route, Routes, useLocation } from "react-router-dom";
 import { type ReactElement, useEffect, useState } from "react";
 import { UIService } from "@/core/services/appStartupService";
+import { Routes } from "react-router";
+import { Route } from "react-router";
+import { useLocation } from "react-router";
 
 type AppContentProps = {
     routeElements: Dictionary<ReactElement>;
@@ -33,7 +35,6 @@ function AppContent({ routeElements, uiService, onReady }: AppContentProps) {
 
     useEffect(() => {
         onReady?.();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     // Calculate allRouteItems from globals

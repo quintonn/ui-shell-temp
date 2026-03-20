@@ -1,5 +1,5 @@
-import { NavLink, useLocation } from "react-router-dom";
-import { useAppGlobals } from "../../state/AppGlobalsContext";
+import { NavLink, useLocation } from "react-router";
+import { useAppGlobals } from "@/core/state/AppGlobalsContext";
 
 export function Breadcrumbs() {
     const location = useLocation();

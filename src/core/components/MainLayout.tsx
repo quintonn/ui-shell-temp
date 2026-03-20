@@ -1,12 +1,12 @@
 import { useEffect, useRef, useState } from "react";
-import { Outlet } from "react-router-dom";
 import { Group, Panel, type PanelImperativeHandle } from "react-resizable-panels";
-import { Breadcrumbs } from "./layout/Breadcrumbs";
-import { NavBar } from "./layout/NavBar";
-import { ResizeHandle, RightSidebar, Sidebar } from "./layout/SidePanels";
-import { useAppGlobals } from "../state/AppGlobalsContext";
-import { useRightSidebar } from "../state/RightSidebarContext";
-import { appUserPreferencesStore } from "../services/userPreferences";
+import { Breadcrumbs } from "@/core/components/layout/Breadcrumbs";
+import { NavBar } from "@/core/components/layout/NavBar";
+import { ResizeHandle, RightSidebar, Sidebar } from "@/core/components/layout/SidePanels";
+import { useAppGlobals } from "@/core/state/AppGlobalsContext";
+import { useRightSidebar } from "@/core/state/RightSidebarContext";
+import { appUserPreferencesStore } from "@/core/services/userPreferences";
+import { Outlet } from "react-router";
 
 type ContentAreaProps = {
     title: string;

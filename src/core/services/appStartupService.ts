@@ -1,5 +1,5 @@
-import type { AppGlobals, Dictionary } from "../types/app";
-import { DefaultIconService } from "./iconService";
+import type { AppGlobals, Dictionary } from "@/core/types/app";
+import { DefaultIconService } from "@/core/services/iconService";
 import type { ReactElement } from "react";
 
 export interface AppStartupService {

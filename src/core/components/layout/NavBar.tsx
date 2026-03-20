@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "react";
-import { NavLink } from "react-router-dom";
-import { useAppGlobals } from "../../state/AppGlobalsContext";
-import type { DefaultIconService } from "../../services/iconService";
-import type { AppIcon, NavbarItem, NavbarSubItem, NavbarTheme } from "../../types/app";
+import { NavLink } from "react-router";
+import { useAppGlobals } from "@/core/state/AppGlobalsContext";
+import type { DefaultIconService } from "@/core/services/iconService";
+import type { AppIcon, NavbarItem, NavbarSubItem, NavbarTheme } from "@/core/types/app";
 
 const NAVBAR_DEFAULTS: Required<NavbarTheme> = {
     header: "bg-white border-slate-200",

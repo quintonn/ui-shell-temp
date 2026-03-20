@@ -1,9 +1,9 @@
 import type { ReactNode } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink } from "react-router";
 import { Panel, Separator, type PanelImperativeHandle } from "react-resizable-panels";
-import { SidebarLink } from "./SidebarLink";
-import { useAppGlobals } from "../../state/AppGlobalsContext";
-import type { AppIcon, SidebarItem } from "../../types/app";
+import { SidebarLink } from "@/core/components/layout/SidebarLink";
+import { useAppGlobals } from "@/core/state/AppGlobalsContext";
+import type { AppIcon, SidebarItem } from "@/core/types/app";
 
 type ResizeHandleProps = {
     disabled?: boolean;
