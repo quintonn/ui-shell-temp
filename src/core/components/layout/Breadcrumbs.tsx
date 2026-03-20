@@ -3,7 +3,7 @@ import { useAppGlobals } from "@/core/state/AppGlobalsContext";
 
 export function Breadcrumbs() {
     const location = useLocation();
-    const { appName } = useAppGlobals();
+    const { appName, iconService } = useAppGlobals();
     const parts = location.pathname.split("/").filter(Boolean);
     const crumbItems = [
         { label: appName, to: "/" },
@@ -30,7 +30,7 @@ export function Breadcrumbs() {
 
                     return (
                         <li key={`${item.to}-${item.label}`} className="flex items-center gap-2">
-                            {index > 0 ? <span className="text-slate-300">/</span> : null}
+                            {index > 0 ? <span className="text-slate-500">{iconService.chevronRightIcon("size-3")}</span> : null}
                             {isLast ? (
                                 <span className="font-medium text-slate-700">{item.label}</span>
                             ) : (
