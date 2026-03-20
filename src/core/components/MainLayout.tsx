@@ -6,6 +6,7 @@ import { NavBar } from "./layout/NavBar";
 import { ResizeHandle, RightSidebar, Sidebar } from "./layout/SidePanels";
 import { useAppGlobals } from "../state/AppGlobalsContext";
 import { useRightSidebar } from "../state/RightSidebarContext";
+import { appUserPreferencesStore } from "../services/userPreferences";
 
 type ContentAreaProps = {
     title: string;
@@ -39,9 +40,27 @@ export function MainLayout({ title }: MainLayoutProps) {
     const leftSidebarOverNavBar = layout.leftSidebarPlacement === "over-nav";
     const rightSidebarOverNavBar = layout.rightSidebarPlacement === "over-nav";
 
-    const [isLeftSidebarCollapsed, setIsLeftSidebarCollapsed] = useState(false);
+    const preferencesRef = useRef(appUserPreferencesStore.get());
+    const [isLeftSidebarCollapsed, setIsLeftSidebarCollapsed] = useState(preferencesRef.current.leftSidebarCollapsed);
     const leftSidebarPanelRef = useRef<PanelImperativeHandle | null>(null);
     const rightSidebarPanelRef = useRef<PanelImperativeHandle | null>(null);
+
+    useEffect(() => {
+        if (!showLeftSidebar || !leftSidebarPanelRef.current) {
+            return;
+        }
+
+        if (isLeftSidebarCollapsed) {
+            leftSidebarPanelRef.current.collapse();
+        } else {
+            leftSidebarPanelRef.current.expand();
+        }
+    }, [isLeftSidebarCollapsed, showLeftSidebar]);
+
+    useEffect(() => {
+        preferencesRef.current.leftSidebarCollapsed = isLeftSidebarCollapsed;
+        appUserPreferencesStore.set(preferencesRef.current);
+    }, [isLeftSidebarCollapsed]);
 
     function toggleLeftSidebar() {
         if (!leftSidebarPanelRef.current) return;
