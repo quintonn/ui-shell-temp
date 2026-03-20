@@ -41,10 +41,14 @@ export function ResizeHandle({ disabled, toggleCollapsed, onToggle }: ResizeHand
 }
 
 export function Sidebar({ collapsed, items, appName }: { collapsed: boolean; items: SidebarItem[]; appName: string }) {
-    const { iconService } = useAppGlobals();
+    const { iconService, sidebarBrand } = useAppGlobals();
 
     function resolveSidebarIcon(icon: AppIcon | undefined) {
         switch (icon) {
+            case "gear":
+                return iconService.gearIcon("size-6");
+            case "profile":
+                return iconService.profileIcon("size-6");
             case "info":
                 return iconService.infoIcon("size-6");
             case "home":
@@ -53,16 +57,30 @@ export function Sidebar({ collapsed, items, appName }: { collapsed: boolean; ite
         }
     }
 
+    function renderBrand() {
+        if (sidebarBrand?.imageSrc) {
+            return (
+                <img
+                    src={sidebarBrand.imageSrc}
+                    alt={sidebarBrand.alt ?? appName}
+                    className="size-9 rounded-xl object-cover"
+                />
+            );
+        }
+
+        return resolveSidebarIcon(sidebarBrand?.icon ?? "home");
+    }
+
     return (
-        <div className="flex h-full min-h-0 flex-col bg-gradient-to-b from-slate-100 to-slate-50 p-4">
+        <div className="flex h-full min-h-0 flex-col bg-gradient-to-b from-slate-100 to-slate-50 px-4  pb-4 ">
             <div className="mb-2 flex justify-center pt-2">
                 <NavLink
-                    to="/"
+                    to={sidebarBrand?.to ?? "/"}
                     end
                     aria-label={appName}
                     className="grid h-11 w-11 place-items-center rounded-2xl text-indigo-700 transition hover:bg-indigo-100 hover:text-indigo-900"
                 >
-                    {iconService.homeIcon("size-6")}
+                    {renderBrand()}
                 </NavLink>
             </div>
 

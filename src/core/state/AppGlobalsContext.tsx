@@ -9,6 +9,11 @@ type AppGlobalsContextValue = AppGlobals & {
 export const DEFAULT_APP_GLOBALS: AppGlobalsContextValue = {
     appName: "App",
     authType: "none",
+    sidebarBrand: {
+        to: "/",
+        icon: "home",
+        alt: "App",
+    },
     sidebarItems: [
         { id: "home", label: "Home", to: "/", icon: "home" },
     ],

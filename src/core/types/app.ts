@@ -25,6 +25,13 @@ export type SidebarItem = {
     to: string;
 };
 
+export type SidebarBrandConfig = {
+    to?: string;
+    icon?: AppIcon;
+    imageSrc?: string;
+    alt?: string;
+};
+
 export type NavbarSubItem = {
     id: string;
     label?: string;
@@ -66,6 +73,7 @@ export type AppTheme = {
 export type AppGlobals = {
     appName: string;
     authType: AuthType;
+    sidebarBrand?: SidebarBrandConfig;
     sidebarItems: SidebarItem[];
     navbarItems: NavbarItem[];
     layout: LayoutConfig;
