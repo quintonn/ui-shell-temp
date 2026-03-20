@@ -8,17 +8,45 @@ import { useRightSidebar } from "@/core/state/RightSidebarContext";
 import { appUserPreferencesStore } from "@/core/services/userPreferences";
 import { Outlet } from "react-router";
 
+const TITLE_SHIMMER_KEYFRAMES = `
+@keyframes uiAppTitleShimmer {
+    0% {
+        transform: translateX(-100%);
+    }
+    100% {
+        transform: translateX(180%);
+    }
+}
+`;
+
 type ContentAreaProps = {
     title: string;
+    isTitleLoading: boolean;
 }
-function ContentArea({ title }: ContentAreaProps) {
+function ContentArea({ title, isTitleLoading }: ContentAreaProps) {
     return (
         <main className="h-full min-h-0 flex-1 overflow-hidden bg-slate-50">
             <div className="mx-auto flex h-full min-h-0 flex-col bg-white p-2 md:p-4 shadow-sm">
                 <Breadcrumbs />
                 <div className="min-h-0 flex-1 overflow-auto">
+                    <style>{TITLE_SHIMMER_KEYFRAMES}</style>
                     <section className="flex h-full flex-col gap-3">
-                        <div className="text-3xl font-bold text-slate-950">{title}</div>
+                        <div className="min-h-12">
+                            {isTitleLoading ? (
+                                <div
+                                    className="relative h-10 w-56 overflow-hidden rounded-md bg-slate-200/90"
+                                    role="status"
+                                    aria-label="Loading title"
+                                >
+                                    <span
+                                        className="absolute inset-y-0 left-0 w-1/2 bg-gradient-to-r from-transparent via-white/85 to-transparent"
+                                        style={{ animation: "uiAppTitleShimmer 1.25s ease-in-out infinite" }}
+                                    />
+                                </div>
+                            ) : (
+                                <div className="text-3xl font-bold leading-tight text-slate-950">{title}</div>
+                            )}
+                        </div>
                         <Outlet />
                     </section>
                 </div>
@@ -28,8 +56,9 @@ function ContentArea({ title }: ContentAreaProps) {
 }
 export type MainLayoutProps = {
     title: string;
+    isTitleLoading: boolean;
 }
-export function MainLayout({ title }: MainLayoutProps) {
+export function MainLayout({ title, isTitleLoading }: MainLayoutProps) {
     const { appName, layout, sidebarItems } = useAppGlobals();
     const { rightSidebar, setRightSidebarCollapsed } = useRightSidebar();
 
@@ -112,7 +141,7 @@ export function MainLayout({ title }: MainLayoutProps) {
     const contentSection = showRightSidebar && rightSidebar.content ? (
         <Group orientation="horizontal" className="h-full w-full">
             <Panel className="min-w-0">
-                <ContentArea title={title} />
+                <ContentArea title={title} isTitleLoading={isTitleLoading} />
             </Panel>
             <ResizeHandle disabled={rightSidebarDisabled} />
             <RightSidebar
@@ -123,7 +152,7 @@ export function MainLayout({ title }: MainLayoutProps) {
             />
         </Group>
     ) : (
-        <ContentArea title={title} />
+        <ContentArea title={title} isTitleLoading={isTitleLoading} />
     );
 
     if (leftSidebarOverNavBar) {
@@ -135,7 +164,7 @@ export function MainLayout({ title }: MainLayoutProps) {
                 <Panel className="min-w-0">
                     <div className="flex h-full min-h-0 flex-col bg-white">
                         {includeTopBar && <NavBar />}
-                        <ContentArea title={title} />
+                        <ContentArea title={title} isTitleLoading={isTitleLoading} />
                     </div>
                 </Panel>
                 <ResizeHandle disabled={rightSidebarDisabled} />
@@ -174,7 +203,7 @@ export function MainLayout({ title }: MainLayoutProps) {
                             <Group orientation="horizontal" className="h-full w-full">
                                 {leftSidebarSection}
                                 <Panel className="min-w-0">
-                                    <ContentArea title={title} />
+                                    <ContentArea title={title} isTitleLoading={isTitleLoading} />
                                 </Panel>
                             </Group>
                         </div>

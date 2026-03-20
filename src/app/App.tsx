@@ -18,20 +18,33 @@ type AppContentProps = {
 function AppContent({ routeElements, uiService, onReady }: AppContentProps) {
     const { sidebarItems, navbarItems } = useAppGlobals();
     const [title, setTitle] = useState<string>("home");
+    const [isTitleLoading, setIsTitleLoading] = useState<boolean>(false);
     const location = useLocation();
 
-    const getTitle = async (): Promise<void> => {
-        console.log("location changed:");
-        console.log(location)
-        const title = await uiService.getPageTitle(location.pathname);
-        setTitle(title);
-    }
-
     useEffect(() => {
-        console.log("location changed:");
-        console.log(location)
-        getTitle();
-    }, [location])
+        let isCurrent = true;
+
+        // Clear stale title immediately so only the loader is shown while fetching.
+        setTitle("");
+        setIsTitleLoading(true);
+        uiService.getPageTitle(location.pathname)
+            .then((nextTitle) => {
+                if (!isCurrent) {
+                    return;
+                }
+                setTitle(nextTitle);
+            })
+            .finally(() => {
+                if (!isCurrent) {
+                    return;
+                }
+                setIsTitleLoading(false);
+            });
+
+        return () => {
+            isCurrent = false;
+        };
+    }, [location.pathname, uiService]);
 
     useEffect(() => {
         onReady?.();
@@ -59,15 +72,32 @@ function AppContent({ routeElements, uiService, onReady }: AppContentProps) {
         return items;
     })();
 
+    // Get all dynamic routes from routeElements that aren't navigation items
+    const dynamicRoutes: string[] = (() => {
+        const navigationRoutes = new Set(allRouteItems.map(p => p.replace(/^\//, "")));
+        const dynamic: string[] = [];
+
+        for (const key in routeElements) {
+            if (key !== "index" && !navigationRoutes.has(key)) {
+                dynamic.push(key);
+            }
+        }
+
+        return dynamic;
+    })();
+
     return (
         <main className="h-dvh w-full overflow-hidden">
             <Routes>
-                <Route path="/" element={<MainLayout title={title} />}>
+                <Route path="/" element={<MainLayout title={title} isTitleLoading={isTitleLoading} />}>
                     <Route index element={routeElements["index"]} />
                     {allRouteItems.map((path) => {
                         return <Route key={path} path={path} element={routeElements[path.replace("/", "")]} />;
                     })}
-                    <Route path="*" element={<div>Unknown path</div>} />
+                    {dynamicRoutes.map((path) => {
+                        return <Route key={path} path={path} element={routeElements[path]} />;
+                    })}
+                    <Route path="*" element={<div>Unknown path: {location.pathname}</div>} />
                 </Route>
             </Routes>
         </main>

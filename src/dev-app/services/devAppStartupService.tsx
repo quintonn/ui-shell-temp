@@ -15,6 +15,7 @@ function sleep(ms: number) {
 const sidebarItems: SidebarItem[] = [
     { id: "home", label: "Home", to: "/", icon: "home" },
     { id: "about", label: "About", to: "/about", icon: "info" },
+    { id: "inventory", label: "Inventory", to: "/inventory", icon: "gear" },
 ];
 
 const navbarItems: NavbarItem[] = [
