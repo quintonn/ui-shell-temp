@@ -42,7 +42,7 @@ export class DevUIService implements UIService {
                 return Promise.resolve("Settings");
             default:
                 if (cleanPath.startsWith("inventory/")) {
-                    const itemId = cleanPath.split("/")[1];
+                    const itemId = cleanPath.split("/")[1]!;
                     // Call the mock API to fetch the actual item name
                     return this.mockFetchInventoryItem(itemId).then(item =>
                         item ? item.name : "Unknown Item"

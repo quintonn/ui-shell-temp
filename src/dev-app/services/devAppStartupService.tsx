@@ -27,8 +27,8 @@ const navbarItems: NavbarItem[] = [
         icon: "profile",
         align: "right",
         items: [
-            { id: "profile-view", label: "Profile", to: "/" },
-            { id: "profile-config", label: "Config", to: "/about" },
+            { id: "profile-view", label: "Profile", to: "/profile" },
+            { id: "profile-config", label: "Config", to: "/config" },
             { id: "profile-logout", label: "Logout", to: "/logout" },
         ]
     },

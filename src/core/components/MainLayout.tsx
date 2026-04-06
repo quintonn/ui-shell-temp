@@ -31,7 +31,7 @@ function ContentArea({ title, isTitleLoading }: ContentAreaProps) {
                 <div className="min-h-0 flex-1 overflow-auto">
                     <style>{TITLE_SHIMMER_KEYFRAMES}</style>
                     <section className="flex h-full flex-col gap-3">
-                        <div className="min-h-12">
+                        <div className="min-h-12 mt-2">
                             {isTitleLoading ? (
                                 <div
                                     className="relative h-10 w-56 overflow-hidden rounded-md bg-slate-200/90"
