@@ -21,6 +21,9 @@
     "jsx": "react-jsx",
     "sourceMap": true,
     "paths": {
+      "ui-app": [
+        "./src/index.ts"
+      ],
       "@/*": [
         "./src/*"
       ]
@@ -31,7 +34,6 @@
   },
   "include": [
     "src",
-    "dev-app",
     "tests",
     "src/types"
   ],

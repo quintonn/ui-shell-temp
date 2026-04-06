@@ -1,5 +1,4 @@
-import { Dictionary } from "@/bootstrapper";
-import { UIService } from "@/core/services/appStartupService";
+import { type Dictionary, type UIService } from "ui-app";
 import { useRightSidebar } from "@/core/state/RightSidebarContext";
 import { AboutPage } from "@/dev-app/pages/AboutPage";
 import { HomePage } from "@/dev-app/pages/HomePage";

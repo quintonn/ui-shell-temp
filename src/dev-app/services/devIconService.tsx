@@ -1,4 +1,4 @@
-import { DefaultIconService } from "@/bootstrapper";
+import { DefaultIconService } from "ui-app";
 import { ReactElement } from "react";
 
 // This is an example of changing the default icons

@@ -61,7 +61,9 @@ function ensureHtmlFile(htmlPath, entryPath) {
 }
 
 function runParcel(command, htmlPath) {
-    const parcelArgs = command === "build" ? ["build", htmlPath] : [htmlPath];
+    const parcelArgs = command === "build"
+        ? ["build", htmlPath, "--target", "app"]
+        : [htmlPath, "--target", "app"];
     const child = spawn("npx", ["--no-install", "parcel", ...parcelArgs], {
         cwd: process.cwd(),
         stdio: "inherit",

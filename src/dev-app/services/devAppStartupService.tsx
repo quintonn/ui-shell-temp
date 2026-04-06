@@ -1,6 +1,4 @@
-import { CachedAppStartupService, UIService } from "@/core/services/appStartupService";
-import { DefaultIconService } from "@/core/services/iconService.js";
-import { type AppGlobals, type NavbarItem, type SidebarItem } from "@/core/types/app";
+import { CachedAppStartupService, DefaultIconService, type AppGlobals, type NavbarItem, type SidebarItem, type UIService } from "ui-app";
 import { DevUIService } from "@/dev-app/services/devUIService";
 import { DevIconService } from "@/dev-app/services/devIconService";
 

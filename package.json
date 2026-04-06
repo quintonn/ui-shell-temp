@@ -1,27 +1,64 @@
 {
-  "name": "ui-app",
-  "version": "1.0.0",
-  "description": "ui-app",
-  "bin": {
-    "qbic": "./cli/qbic.cjs"
+  "name": "@quintonn/ui-app",
+  "version": "0.0.3",
+  "description": "Reusable React application shell package",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/quintonn/ui-shell-temp.git"
+  },
+  "homepage": "https://github.com/quintonn/ui-shell-temp",
+  "bugs": {
+    "url": "https://github.com/quintonn/ui-shell-temp/issues"
+  },
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./index.d.ts",
+  "typings": "./index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "index.d.ts",
+    "README.md"
+  ],
+  "sideEffects": false,
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
+  "targets": {
+    "main": false,
+    "module": false,
+    "app": {
+      "distDir": "./dist-app"
+    }
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "node ./cli/qbic.cjs dev --entry ./dev-app/AppConfig.tsx",
-    "build": "node ./cli/qbic.cjs build --entry ./dev-app/AppConfig.tsx",
+    "build": "npm run build:package",
+    "build:app": "node ./cli/qbic.cjs build --entry ./dev-app/AppConfig.tsx",
+    "build:package": "tsup && node ./scripts/copy-package-assets.mjs",
     "lint": "eslint . --ext .ts,.tsx,.js,.cjs",
-    "lint:fix": "eslint . --ext .ts,.tsx,.js,.cjs --fix"
+    "lint:fix": "eslint . --ext .ts,.tsx,.js,.cjs --fix",
+    "prepublishOnly": "npm run lint && npm run build"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs",
+  "type": "module",
   "dependencies": {
-    "react": "^19.2.4",
-    "react-dom": "^19.2.4",
     "react-resizable-panels": "^4.7.3",
-    "react-router": "^7.13.1",
-    "react-router-dom": "^7.13.1"
+    "react-router": "^7.13.1"
+  },
+  "peerDependencies": {
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
@@ -32,6 +69,11 @@
     "eslint": "^10.0.3",
     "globals": "^17.4.0",
     "parcel": "^2.16.4",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
+    "react-resizable-panels": "^4.7.3",
+    "react-router": "^7.13.1",
+    "tsup": "^8.5.0",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.29.0"
   }

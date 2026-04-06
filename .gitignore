@@ -1,4 +1,7 @@
 dist
+dist-app
 .parcel-cache
 node_modules
 src/index.html
+.env
+quintonn-*.tgz
