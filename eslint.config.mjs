@@ -4,7 +4,7 @@ import tseslint from "typescript-eslint";
 
 export default [
     {
-        ignores: ["dist/**", "dist-app/**", "node_modules/**", ".parcel-cache/**", "src/js/**"],
+        ignores: ["dist/**", "dist-app/**", "node_modules/**", ".parcel-cache/**", "src/js/**", "create-ui-app/template/**"],
     },
     {
         files: ["**/*.{js,cjs,mjs}"],

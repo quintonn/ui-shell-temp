@@ -14,7 +14,7 @@ if not exist "%ENV_FILE%" (
     exit /b 1
 )
 
-for /f "usebackq tokens=1,* delims==" %%A in (`findstr /r /v "^[ ]*# ^[ ]*$" "%ENV_FILE%"`) do (
+for /f "usebackq tokens=1,* delims==" %%A in (`findstr /r /v /c:"^[ ]*#" /c:"^[ ]*$" "%ENV_FILE%"`) do (
     set "%%A=%%B"
 )
 

@@ -1,6 +1,6 @@
 {
   "name": "@quintonn/ui-app",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Reusable React application shell package",
   "repository": {
     "type": "git",
